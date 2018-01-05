@@ -105,3 +105,4 @@ novels/*
 cleaned/*
 models/*
 *.ipynb
+*.txt
