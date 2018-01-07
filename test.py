@@ -13,24 +13,44 @@ def katakanaparser(string):
     string = [word[1] for word in string if re_identifier.match(word[1])]
     return string
 
-def calculate_score(problem, ans):
+def calculate_score(problem, ans, detail):
     scores = []
-    for choice in ans:
+    for index, choice in enumerate(ans):
         score = 0
         sent = katakanaparser(problem % choice)
         
-        # w1
-        score += log(freq_dict[sent[0]] / len(freq_dict))
-        # w2
-        score += log(freq_dict[" ".join(sent[:2])] / freq_dict[sent[0]])
+        if detail:
+            print('Sentence %d:' % index)
+            print(sent)
         
-        for i in range(len(sent) - 2):
-            given_phrase = " ".join(sent[i:i+2])
-            corpus_phrase = " ".join(sent[i:i+3])
-            if corpus_phrase in freq_dict:
-                prob = freq_dict[corpus_phrase] / freq_dict[given_phrase]
+        for i in range(len(sent)):
+            
+            if i == 0:
+                corpus_phrase = sent[0]
+                given_phrase = 'ーはじめー'
+                if corpus_phrase in freq_dict:
+                    prob = freq_dict[corpus_phrase] / len(freq_dict)
+                else:
+                    prob = 0.0000001
             else:
-                prob = 0.0000001
+                if i == 1:
+                    corpus_phrase = " ".join(sent[0:2])
+                    given_phrase = sent[0]
+                else:
+                    corpus_phrase = " ".join(sent[i-2:i+1])
+                    given_phrase = " ".join(sent[i-2:i])
+                if corpus_phrase in freq_dict:
+                    prob = freq_dict[corpus_phrase] / freq_dict[given_phrase]
+                else:
+                    prob = 0.0000001
+            if detail:
+                print_buf = 15
+                given_phrase = '　'.join(given_phrase.split(' '))
+                corpus_phrase = '　'.join(corpus_phrase.split(' '))
+                print('Given: ', given_phrase+'　'*(print_buf-len(given_phrase)), \
+                      'Target: ', corpus_phrase+'　'*(print_buf-len(corpus_phrase)),\
+                      'Prob: {0:.8f}'.format(prob))
+#             print('Given: {0:<10}, Target: {1:<10}, Prob: {2:0.5f}'.format(given_phrase, corpus_phrase, prob))
             score += log(prob)
         scores.append(score)
     return scores
@@ -45,17 +65,20 @@ if __name__ == '__main__':
             for line in f:
                 problem, *ans = line.strip('\n').split(', ')
                 print(problem.replace('%s', '___') + '\n' + ' '.join(ans), end='\n\n')
-                scores = calculate_score(problem, ans)
+                scores = calculate_score(problem, ans, detail=False)
                 index, _ = max(enumerate(scores), key=lambda x:x[1])
                 print('ans: ', ans[index], end='\n\n')
     elif sys.argv[1] == 'online':
         while(True):
+            print('Input:')
             line = [input() for _ in range(6)]
             show_problem = line[0] + '___' + line[1]
             problem = line[0] + '%s' + line[1]
             ans = line[2:]
-            print(show_problem, ans)
-            scores = calculate_score(problem, ans)
+            print('Problem and Choices:', end='\n\n')
+            print(show_problem, ans, end='\n\n')
+            scores = calculate_score(problem, ans, detail=False)
             index, _ = max(enumerate(scores), key=lambda x:x[1])
+            print('Scores:', end='\n\n')
             print(scores)
-            print(ans[index])
+            print('Predicted Answer:', ans[index], end='\n\n')
