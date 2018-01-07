@@ -14,7 +14,7 @@ def gen_Ngram(words, N):
         if count % 1000000 == 0:
             print('%d-gram: %d phrases recorded.' % (N, count))
 
-for gram in range(2, 4):
+for gram in range(1, 4):
     with open('cleaned/cleaned_katakana.txt', 'r') as f:
         for line in f:
             words = line.strip(' \n').split(' ')
