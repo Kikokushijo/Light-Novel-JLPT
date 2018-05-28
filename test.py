@@ -57,17 +57,27 @@ def calculate_score(problem, ans, detail):
 
 if __name__ == '__main__':
 
+    print('Start to load model...', flush=True)
     with open('models/3-gram_katakana.json', 'r', encoding='utf-8') as outfile:
         freq_dict = json.load(outfile)
+    print('Finish loading model...', flush=True)
 
+    print('Start to test...', flush=True)
     if sys.argv[1] == 'txt':
-        with open('problems/N2_c.txt', 'r') as f:
+        with open('problems/q.txt', 'r') as f:
+            q_num, correct = 0, 0
             for line in f:
-                problem, *ans = line.strip('\n').split(', ')
-                print(problem.replace('%s', '___') + '\n' + ' '.join(ans), end='\n\n')
-                scores = calculate_score(problem, ans, detail=False)
+                q_num += 1
+                problem, *opt, ans = line.strip('\n').split(', ')
+                ans = int(ans) - 1
+                print(problem.replace('%s', '___') + '\n' + ' '.join(opt), end='\n\n')
+                scores = calculate_score(problem, opt, detail=False)
                 index, _ = max(enumerate(scores), key=lambda x:x[1])
-                print('ans: ', ans[index], end='\n\n')
+                print('predict: ', opt[index])
+                print('answer : ', opt[ans], end='\n\n', flush=True)
+                if index == ans:
+                    correct += 1
+            print('acc    : ', '%.2f' % (correct * 100 / q_num))
     elif sys.argv[1] == 'online':
         while(True):
             print('Input:')
