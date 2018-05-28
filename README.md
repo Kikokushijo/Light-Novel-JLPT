@@ -17,6 +17,12 @@ Read Japanese light novels and have Japanese Language Proficiency Test (JLPT).
 
   `$ python3 build.py `
 
+- To do things above:
+
+  `$ ./build_all.sh `
+
+  ​
+
 
 - If you don't want to do things above by yourself,
 
