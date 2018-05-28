@@ -36,11 +36,12 @@ Read Japanese light novels and have Japanese Language Proficiency Test (JLPT).
 
 
 
-- To test questions online:
+- To test questions by user's input:
+
+  **Warning: The language model is large and you will need about 6GB RAM to load it.**
 
   `$ python3 test.py online`
 
 - To test questions from data:
 
   `$ python3 test.py txt`
-
