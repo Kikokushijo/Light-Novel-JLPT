@@ -45,3 +45,11 @@ Read Japanese light novels and have Japanese Language Proficiency Test (JLPT).
 - To test questions from data:
 
   `$ python3 test.py txt`
+  
+  The data should be saved in `problems/q.txt`,
+  and be saved with the format `problem, option1, option2, option3, option4, ans`.
+  
+  There is an example below:
+  `台風が来るから、%sほうがいい。, 帰った, 帰る, 帰って, 帰り, 1`
+  
+  The blank should be represented by `%s`, and the answer is 1-based (the answer of the problem above is `帰った`)
