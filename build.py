@@ -1,4 +1,5 @@
 import json
+import os
 
 count = 0
 freq_dict = {}
@@ -20,5 +21,6 @@ for gram in range(1, 4):
             words = line.strip(' \n').split(' ')
             gen_Ngram(words, gram)
 
+os.makedirs('models', exist_ok=True)
 with open('models/3-gram_katakana.json', 'w', encoding='utf-8') as outfile:
     json.dump(freq_dict, outfile, ensure_ascii=False)

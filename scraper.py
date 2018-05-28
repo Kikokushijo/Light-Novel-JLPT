@@ -5,7 +5,11 @@ import json
 import os
 import codecs
 
-for page in range(1, 10):
+page_num = 10
+os.makedirs('corpus', exist_ok=True)
+
+for page in range(1, page_num+1):
+    print('Scraping Page %d...' % page)
     url = "https://yomou.syosetu.com/search.php?&order=hyoka&notnizi=1&p=" + str(page)
     context = ssl._create_unverified_context()
     html = urllib.request.urlopen(url, context=context)
@@ -30,7 +34,7 @@ for page in range(1, 10):
         subs = _htmlbs.findAll("dl", {"class":"novel_sublist2"})
         subsurl = []
         i = 0
-        os.makedirs(novel[0], exist_ok=True)
+        os.makedirs(os.path.join('corpus', novel[0]), exist_ok=True)
         for sub in subs:
             #print(sub)
             subsurl += [[sub.dd.a.get_text(), sub.dd.a.attrs["href"]]]
@@ -46,7 +50,9 @@ for page in range(1, 10):
             #print(text)
             #input()
 
-            with codecs.open(os.path.join(novel[0], str(i) + ".txt"), 'w+', encoding="utf-8") as f:
+            foldername = os.path.join(os.path.join('corpus', novel[0]), str(i) + '.txt')
+            # with codecs.open(os.path.join(novel[0], str(i) + ".txt"), 'w+', encoding="utf-8") as f:
+            with codecs.open(foldername, 'w+', encoding="utf-8") as f:
                 #json.dumps(text, f)
                 f.write(text)
 
