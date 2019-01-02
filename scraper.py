@@ -45,16 +45,24 @@ for page in range(1, page_num+1):
             __content = __html.read().decode('utf-8')
             __htmlbs = BeautifulSoup(__content, "html.parser")
 
-            text = __htmlbs.find("div", {"class":"novel_view"}).get_text()
-            #print(sub[0])
-            #print(text)
-            #input()
+            try:
 
-            foldername = os.path.join(os.path.join('corpus', novel[0]), str(i) + '.txt')
-            # with codecs.open(os.path.join(novel[0], str(i) + ".txt"), 'w+', encoding="utf-8") as f:
-            with codecs.open(foldername, 'w+', encoding="utf-8") as f:
-                #json.dumps(text, f)
-                f.write(text)
+                text = __htmlbs.find("div", {"class":"novel_view"}).get_text()
+                #print(sub[0])
+                #print(text)
+                #input()
 
-            print("saved: " + novel[0] + " - " + str(i) + ".txt")
+                foldername = os.path.join(os.path.join('corpus', novel[0]), str(i) + '.txt')
+                # with codecs.open(os.path.join(novel[0], str(i) + ".txt"), 'w+', encoding="utf-8") as f:
+                with codecs.open(foldername, 'w+', encoding="utf-8") as f:
+                    #json.dumps(text, f)
+                    f.write(text)
+
+                print("saved: " + novel[0] + " - " + str(i) + ".txt")
+
+            except:
+
+                print("Error when saved: " + novel[0] + " - " + str(i) + ".txt")
+                print("Skipped")
+
             i += 1
